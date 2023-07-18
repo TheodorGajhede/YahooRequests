@@ -1,4 +1,4 @@
-name: Get stock price and name
+name: YahooRequests
 on:
   push:
     branches:
