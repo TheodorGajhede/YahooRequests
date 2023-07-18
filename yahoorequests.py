@@ -10,7 +10,7 @@ class ConvertError(Exception):
     pass
 
 
-class YahooRequest():
+class YahooRequests():
     global url
     global headers
 
