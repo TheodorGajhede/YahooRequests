@@ -1,28 +1,15 @@
-name: Build and test
-
+name: Get stock price and name
 on:
   push:
     branches:
-      - master
-
+      - main
 jobs:
-  build:
+  get_stock_price:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Build package
-        run: python setup.py sdist bdist_wheel
-      - name: Test package
-        run: pytest
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install twine
-        run: pip install twine
-      - name: Publish package
-        run: twine upload dist/*
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - run: pip install requests
+      - run: python yahoo_requests.py
