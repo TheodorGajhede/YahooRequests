@@ -12,4 +12,4 @@ jobs:
         with:
           python-version: 3.8
       - run: pip install requests
-      - run: python yahoo_requests.py
+      - run: python yahoorequests.py
