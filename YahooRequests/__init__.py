@@ -1,3 +1,3 @@
-from yahoorequests import YahooRequests
+from YahooRequests.yahoorequests import YahooRequests
 
 __all__ = ['YahooRequests']

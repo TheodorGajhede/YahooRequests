@@ -6,6 +6,12 @@
 
 ### How to use
 
+    from YahooRequests import YahooRequests as yr    
+    # Now you can just print this value or assign it as a variable
+    yr.price("googl")
+    # The same goes for name
+    yr.name("googl")
+
 ### YahooRequests.price(ticker)
 
     It is very simple you are only required to input a ticker  and it will return the live price
