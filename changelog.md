@@ -1,4 +1,5 @@
 # Changlelog for YahooRequests By Theodor Gajhede
 
-
-* Version 0.1.0 Main Release. Should be mostly stable (18/07/23)
+* Version 0.1.1 Main Version (18/07/23)
+  #### Fixed workflow.yml
+* Version 0.1.0 BROKEN (18/07/23)
