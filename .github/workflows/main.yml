@@ -12,5 +12,5 @@ jobs:
         with:
           python-version: 3.8
       - run: pip install requests
-      - run: cd YahooRequests
+      - run: cd YahooRequests/
       - run: python yahoorequests.py
