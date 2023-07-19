@@ -1,8 +1,8 @@
 from distutils.core import setup
 setup(
-    name='YahooRequest',
+    name='YahooRequests',
     packages=['yahoorequests'],
-    version='0.1.1',
+    version='0.1.3',
     license='MIT',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
