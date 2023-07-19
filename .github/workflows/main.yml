@@ -13,4 +13,5 @@ jobs:
           python-version: 3.8
           node-version: 16
       - run: pip install requests
+      - run: cd YahooRequests
       - run: python yahoorequests.py
