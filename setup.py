@@ -4,6 +4,8 @@ setup(
     packages=['YahooRequests'],
     version='0.1',
     license='MIT',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     description='A simple Python library for getting stock prices and company names from Yahoo Finance.',
     author='Theodor Gajhede',
     author_email='theodorgajhede@gmail.com',

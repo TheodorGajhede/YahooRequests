@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: YahooRequests
+Version: 0.1
+Summary: A simple Python library for getting stock prices and company names from Yahoo Finance.
+Home-page: https://github.com/TheodorGajhede/YahooRequests
+Download-URL: https://github.com/TheodorGajhede/YahooRequests/archive/refs/tags/TEST.tar.gz
+Author: Theodor Gajhede
+Author-email: theodorgajhede@gmail.com
+License: MIT
+Keywords: Stocks,Ticker,Yahoo
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.8
+License-File: LICENSE
+License-File: LICENSE.txt

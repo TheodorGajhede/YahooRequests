@@ -1,0 +1,13 @@
+LICENSE
+LICENSE.txt
+README.md
+setup.cfg
+setup.py
+YahooRequests/__init__.py
+YahooRequests/yahoorequests.py
+YahooRequests.egg-info/PKG-INFO
+YahooRequests.egg-info/SOURCES.txt
+YahooRequests.egg-info/dependency_links.txt
+YahooRequests.egg-info/entry_points.txt
+YahooRequests.egg-info/requires.txt
+YahooRequests.egg-info/top_level.txt

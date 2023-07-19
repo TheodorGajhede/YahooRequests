@@ -1,0 +1,2 @@
+[console_scripts]
+yahoo_requests = yahoorequests.cli:main
