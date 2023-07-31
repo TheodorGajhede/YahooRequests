@@ -20,3 +20,5 @@
 ### YahooRequests.convert(ticker)
 
     The same goes for convert, the returned value will be the full company name
+
+If import YahooRequests gives an "import could not be resolved" error, try "pip install YahooRequests --user"
