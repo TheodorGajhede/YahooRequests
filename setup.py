@@ -1,8 +1,9 @@
-from distutils.core import setup
+from setuptools import setup
+
 setup(
     name='YahooRequests',
     packages=['YahooRequests'],
-    version='0.1.5',
+    version='0.1.5.5',
     license='MIT',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -17,12 +18,17 @@ setup(
           ],
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',      # Define that your audience are developers
+        'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: MIT License',   # Again, pick a license
-        'Programming Language :: Python :: 3',      # Specify which pyhton versions that you want to support
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.8',
-            ],
+    ],
+    entry_points={
+        'console_scripts': [
+            'yahoorequests=YahooRequests.yahoorequests:main',
+        ],
+    },
 )
