@@ -11,7 +11,7 @@ setup(
     author='Theodor Gajhede',
     author_email='theodorgajhede@gmail.com',
     url='https://github.com/TheodorGajhede/YahooRequests',
-    download_url='https://github.com/TheodorGajhede/YahooRequests/archive/refs/tags/FIXED.tar.gz',
+    download_url='https://github.com/TheodorGajhede/YahooRequests/archive/refs/tags/point_five.tar.gz',
     keywords=['Stocks', 'Ticker', 'Yahoo'],
     install_requires=[
           'requests'
@@ -25,6 +25,10 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        
     ],
     entry_points={
         'console_scripts': [
