@@ -1,26 +1,29 @@
 # Yahoo Requests
 
-## By Theodor Gajhede from the northeren part of Denmark
+A small Python library for getting prices and full names of companies using Yahoo.
 
-### This is a small library for getting prices and fullnames of companies using Yahoo
+## Author
 
-### How to use
+Theodor Gajhede from the north of Denmark
 
-    from YahooRequests import YahooRequests as yr    
-    # Now you can just print this value or assign it as a variable
-    yr.price("googl")
-    # The same goes for name
-    yr.name("googl")
+## Usage
 
-### YahooRequests.price(ticker)
+```python
+from YahooRequests import YahooRequests as yr
 
-    It is very simple you are only required to input a ticker  and it will return the live price
-    the ticker will be unpacked using * so it can be a str, or a single byte list like ["googl"]
+# Get the live price of Google
+price = yr.price("googl")
 
-### YahooRequests.convert(ticker)
+# Get the full company name of Google
+name = yr.name("googl")
+```
+## Installation
+```python
+pip install YahooRequests 
+```
+## Support
+If ``` import YahooRequests from YahooRequests``` doesn't work
+ try using the "--user" flag when  installing with pip or contact RedDied at reddied@gmail.com
 
-    The same goes for convert, the returned value will be the full company name
-
-If import YahooRequests gives an "import could not be resolved" error, try "pip install YahooRequests --user"
-
-#### Thank you very much u/Diapolo10 for helping with version 0.2
+## Credits
+#### Thanks to u/Diapolo10 for helping with version 0.2.
