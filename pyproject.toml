@@ -7,7 +7,7 @@ name = "YahooRequests"
 packages = [
     { include = "YahooRequests" }
 ]
-version = "0.2"
+version = "1.0"
 description = "A simple Python library for getting stock prices and company names from Yahoo Finance."
 authors = ["Theodor Gajhede <theodorgajhede@gmail.com>"]
 include = ['CHANGELOG.md', 'LICENSE']
