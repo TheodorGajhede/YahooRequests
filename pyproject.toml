@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools >= 42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+name = "YahooRequests"
+version = "0.2"
+description = "A simple Python library for getting stock prices and company names from Yahoo Finance."
+authors = ["Theodor Gajhede <theodorgajhede@gmail.com>"]
+include = ['CHANGELOG.md', 'LICENSE']
+readme = 'README.md'
+license = "MIT"
+homepage = "https://github.com/TheodorGajhede/YahooRequests"
+repository = "https://github.com/TheodorGajhede/YahooRequests.git"
+keywords = [
+    'Stocks',
+    'Yahoo',
+    'Finance',
+]
+
+[tool.poetry.dependencies]
+python = ">=3.4"
+requests = "^2.0"
+
+[tool.poetry.scripts]
+yahoorequests = "YahooRequests.yahoorequests:main"

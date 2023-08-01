@@ -22,3 +22,5 @@
     The same goes for convert, the returned value will be the full company name
 
 If import YahooRequests gives an "import could not be resolved" error, try "pip install YahooRequests --user"
+
+#### Thank you very much u/Diapolo10 for helping with version 0.2
