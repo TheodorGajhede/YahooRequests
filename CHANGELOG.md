@@ -1,12 +1,12 @@
 # Changlelog for YahooRequests By Theodor Gajhede
 
-* Version 0.2 Remake (01/08/23)
+* Version 1.0 Rewrite (01/08/23)
     Updated to use new setup type
     Updated code to have less duplicates
     Updated ease of updating
     Added new yml file
     Removed incorrect global variables
-    Removed dublicate licenses
+    Removed duplicate licenses
     Thanks to u/Diapolo10 for technical support
 
 * Version 0.1.5.X Outdated (27/07/23)

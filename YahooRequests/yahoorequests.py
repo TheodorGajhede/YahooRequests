@@ -1,5 +1,8 @@
 from http import HTTPStatus
+import string
+import os
 import requests
+
 
 API_URL_TEMPLATE = 'https://query1.finance.yahoo.com/v7/finance/options/{ticker}'
 
@@ -14,10 +17,30 @@ HEADERS = {
 
 
 class ConversionError(Exception):
-    """Ticker could not be converted to company name, please contact the creator"""
+    ''' Error that will be raised if converting a ticker is not succesfull'''
+    def __init__(self, response):
+        self.response = response
+
+    def __str__(self):
+        return f"[{self.response}] - Failed to fetch ticker symbol"
 
 
 class YahooRequests:
+    ''' The class for YahooRequests, having different features for stock extracting'''
+    @staticmethod
+    def converted_currency(price: int, currency: str) -> int:
+        ''' Convert the price to a different currency using OER'''
+        # Acces the workflow defined OER Key using os
+        api_key = os.environ["OER"]
+        # Use the OpenExhangeRates api to get current currency rates
+        url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
+        # Use requests to define as variable
+        response = requests.get(url, timeout=10)
+        # Convert to json format so it is indexable
+        data = response.json()
+        # Index to the location of the uppercase version of the chosen curreny
+        converted_price = data["rates"][*currency.upper()] * price
+        print(round(converted_price, 2))
 
     @staticmethod
     def request_ticker_info(ticker: str) -> dict:
@@ -27,28 +50,53 @@ class YahooRequests:
         Raises ConversionError if the request wasn't successful.
         """
 
-        response = requests.get(API_URL_TEMPLATE.format(ticker=ticker), headers=HEADERS)
+        response = requests.get(API_URL_TEMPLATE.format(ticker=ticker), headers=HEADERS, timeout=10)
 
         if response.status_code != HTTPStatus.OK:
             raise ConversionError(f"[{response.status_code}] - Failed to fetch ticker symbol")
 
-        data = response.json()
-        return data['optionChain']['result'][0]['quote']
+        try:
+            # Convert to Json format and find price
+            data = response.json()['optionChain']['result'][0]['quote']
+        except IndexError as exc:
+            # If price could not be found raise conversionerror
+            # This may occur because the ticker is incorrect or non-existand
+            raise ConversionError(response.status_code) from exc
+        return data
 
     @classmethod
-    def price(cls, ticker: str) -> int:
+    def price(cls, ticker: str, *convert_currency) -> int:
         '''
         Gets the current price of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
         '''
-        return cls.request_ticker_info(ticker)['regularMarketPrice']
+        price_usd = cls.request_ticker_info(ticker)['regularMarketPrice']
+        if convert_currency:
+            return cls.converted_currency(price_usd, convert_currency)
+        else:
+            return price_usd
 
     @classmethod
-    def name(cls, ticker: str) -> str:
+    def name(cls, ticker: str, suffix=True) -> str:
         """
         Gets the company name of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
         """
-        return cls.request_ticker_info(ticker)['shortName']
+        name = cls.request_ticker_info(ticker)['shortName']
+        if suffix is not True:
+            suffixes = [
+                        "corp.", ", inc.", "co.",
+                        "ltd.", "plc", "sa", "ag",
+                        " &", "inc.", "(the)", "ord", "sh"
+                        ]
+            for suffix in suffixes:
+                name = name.lower().replace(suffix, "")
+            return string.capwords(name, sep=None)
+        else:
+            return name
+
+
+if __name__ == "__main__":
+    YahooRequests.price("pi", "eur")

@@ -17,13 +17,18 @@ price = yr.price("googl")
 # Get the full company name of Google
 name = yr.name("googl")
 ```
+
 ## Installation
+
 ```python
 pip install YahooRequests 
 ```
+
 ## Support
-If ``` import YahooRequests from YahooRequests``` doesn't work
- try using the "--user" flag when  installing with pip or contact RedDied at reddied@gmail.com
+
+If ```import YahooRequests from YahooRequests``` doesn't work
+ try using the "--user" flag when  installing with pip or send a ticket to [RedDied](reddieddk@gmail.com)
 
 ## Credits
-#### Thanks to u/Diapolo10 for helping with version 0.2.
+
+### Thanks to u/Diapolo10 for helping with version 1.0
