@@ -44,7 +44,7 @@ class YahooRequests:
     def converted_currency(price: int, currency: str) -> int:
         ''' Convert the price to a different currency using OER'''
         # Acces the workflow defined OER Key using os
-        api_key = os.environ["OER_KEY"]
+        api_key = os.environ["OER"]
         # Use the OpenExhangeRates api to get current currency rates
         url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
         # Use requests to define as variable
@@ -52,7 +52,7 @@ class YahooRequests:
         # Convert to json format so it is indexable
         data = response.json()
         # Unpack currency
-        if isinstance(currency, list):
+        if isinstance(currency, tuple):
             unpacked_currency = currency[0]    
         else:
             unpacked_currency = currency
