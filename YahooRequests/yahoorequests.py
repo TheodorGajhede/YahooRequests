@@ -44,7 +44,7 @@ class YahooRequests:
     def converted_currency(price: int, currency: str) -> int:
         ''' Convert the price to a different currency using OER'''
         # Acces the workflow defined OER Key using os
-        api_key = os.environ["OER"]
+        api_key = os.environ["OER_KEY"]
         # Use the OpenExhangeRates api to get current currency rates
         url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
         # Use requests to define as variable
@@ -117,3 +117,4 @@ class YahooRequests:
                 return cls.remove_suffix(name)
             else:
                 return name
+YahooRequests.price("pi", "dkk")
