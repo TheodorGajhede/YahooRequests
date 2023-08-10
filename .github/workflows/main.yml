@@ -1,6 +1,4 @@
 name: YahooRequests
-env:
-  OER_KEY: ${{secrets.OER_KEY}}
 on:
   push:
     branches:
