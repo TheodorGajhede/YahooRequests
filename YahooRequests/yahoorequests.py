@@ -117,4 +117,3 @@ class YahooRequests:
                 return cls.remove_suffix(name)
             else:
                 return name
-YahooRequests.price("pi", "dkk")
