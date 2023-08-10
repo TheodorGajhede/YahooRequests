@@ -11,11 +11,18 @@ Theodor Gajhede from the north of Denmark
 ```python
 from YahooRequests import YahooRequests as yr
 
-# Get the live price of Google
+# Get the live price of Google in USD
 price = yr.price("googl")
 
 # Get the full company name of Google
 name = yr.name("googl")
+
+# Get the converted price of Google, this only takes currency codes^1 
+converted_price = yr.price("googl", "eur")
+
+# Full company name of Google with no suffix, like inc, or corp.
+# if no argument is given this will be included
+no_suffix_name = yr.name("googl", suffix=False)
 ```
 
 ## Installation
@@ -23,6 +30,8 @@ name = yr.name("googl")
 ```python
 pip install YahooRequests 
 ```
+## Footnotes
+^1 Currency codes can be found [here](https://www.iban.com/currency-codes)
 
 ## Support
 

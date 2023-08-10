@@ -27,6 +27,19 @@ class ConversionError(Exception):
 
 class YahooRequests:
     ''' The class for YahooRequests, having different features for stock extracting'''
+    
+    @staticmethod
+    def remove_suffix(name):
+        suffixes = [
+                    "corp.", ",", "co.",
+                    "ltd.", "plc", "sa", "ag",
+                    " &", "inc.", "(the)", "ord", "sh",
+                    "inc"
+                    ]
+        for suffix in suffixes:
+            name = name.lower().replace(suffix, "")
+        return string.capwords(name, sep=None)
+    
     @staticmethod
     def converted_currency(price: int, currency: str) -> int:
         ''' Convert the price to a different currency using OER'''
@@ -38,9 +51,14 @@ class YahooRequests:
         response = requests.get(url, timeout=10)
         # Convert to json format so it is indexable
         data = response.json()
+        # Unpack currency
+        if isinstance(currency, list):
+            unpacked_currency = currency[0]    
+        else:
+            unpacked_currency = currency
         # Index to the location of the uppercase version of the chosen curreny
-        converted_price = data["rates"][*currency.upper()] * price
-        print(round(converted_price, 2))
+        converted_price = data["rates"][unpacked_currency.upper()] * price
+        return round(converted_price, 2)
 
     @staticmethod
     def request_ticker_info(ticker: str) -> dict:
@@ -71,32 +89,31 @@ class YahooRequests:
 
         Raises ConversionError if the ticker symbol is invalid.
         '''
-        price_usd = cls.request_ticker_info(ticker)['regularMarketPrice']
+        try:
+            price_usd = cls.request_ticker_info(ticker)['regularMarketPrice']
+        except LookupError:
+            raise ConversionError(ticker)
         if convert_currency:
             return cls.converted_currency(price_usd, convert_currency)
         else:
             return price_usd
 
     @classmethod
-    def name(cls, ticker: str, suffix=True) -> str:
+    def name(cls, ticker: str, remove_suffix=False) -> str:
         """
         Gets the company name of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
         """
-        name = cls.request_ticker_info(ticker)['shortName']
-        if suffix is not True:
-            suffixes = [
-                        "corp.", ", inc.", "co.",
-                        "ltd.", "plc", "sa", "ag",
-                        " &", "inc.", "(the)", "ord", "sh"
-                        ]
-            for suffix in suffixes:
-                name = name.lower().replace(suffix, "")
-            return string.capwords(name, sep=None)
+        try:
+            name = cls.request_ticker_info(ticker)['shortName']
+        except LookupError:
+            raise ConversionError(ticker)
+        # Check if the name only consist of numbers, and therefore is not what the user is looking for
+        if name.isnumeric():
+            raise ConversionError(f"{ticker} fetches number instead of str")
         else:
-            return name
-
-
-if __name__ == "__main__":
-    YahooRequests.price("pi", "eur")
+            if remove_suffix is not False:
+                return cls.remove_suffix(name)
+            else:
+                return name
