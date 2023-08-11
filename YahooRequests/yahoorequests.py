@@ -5,14 +5,14 @@ import requests
 from tabulate import tabulate
 
 
-API_URL_TEMPLATE = 'https://query1.finance.yahoo.com/v7/finance/options/{ticker}'
+API_URL_TEMPLATE = "https://query1.finance.yahoo.com/v7/finance/options/{ticker}"
 
 # Yahoo's api was shut down in 2017 so making a header is required to look like a browser
 HEADERS = {
-    'User-Agent': (
-        'Mozilla/5.0 (X11; Linux x86_64)'
-        ' AppleWebKit/537.36 (KHTML, like Gecko)'
-        ' Chrome/108.0.0.0 Safari/537.36'
+    "User-Agent": (
+        "Mozilla/5.0 (X11; Linux x86_64)"
+        " AppleWebKit/537.36 (KHTML, like Gecko)"
+        " Chrome/108.0.0.0 Safari/537.36"
     )
 }
 
@@ -37,26 +37,35 @@ class YahooRequests:
         """Give table with the values of the compnay and other information."""
         response = cls.request_ticker_info(ticker)
         table = [
-                ["Name: ", cls.name(ticker)],
-                ["Current price: ", f"${cls.price(ticker)}"],
-                ["Region: ", response["region"]],
-                ["Language: ", response["language"]],
-                ["Exhange: ", response["fullExchangeName"]],
-                ["Average analyst rating: ", response["averageAnalystRating"]],
-                ["Fifty day average price: ", response["fiftyDayAverage"]],
-                ["Twohundred day average: ", response["twoHundredDayAverage"]]
-                ]
+            ["Name: ", cls.name(ticker)],
+            ["Current price: ", f"${cls.price(ticker)}"],
+            ["Region: ", response["region"]],
+            ["Language: ", response["language"]],
+            ["Exhange: ", response["fullExchangeName"]],
+            ["Average analyst rating: ", response["averageAnalystRating"]],
+            ["Fifty day average price: ", response["fiftyDayAverage"]],
+            ["Twohundred day average: ", response["twoHundredDayAverage"]],
+        ]
         return tabulate(table, tablefmt="mixed_grid")
 
     @staticmethod
     def remove_suffix(name):
         """Remove the ending suffix like Inc. in Alphabet Inc."""
         suffixes = [
-                    "corp.", ",", "co.",
-                    "ltd.", "plc", "sa", "ag",
-                    " &", "inc.", "(the)", "ord", "sh",
-                    "inc"
-                    ]
+            "corp.",
+            ",",
+            "co.",
+            "ltd.",
+            "plc",
+            "sa",
+            "ag",
+            " &",
+            "inc.",
+            "(the)",
+            "ord",
+            "sh",
+            "inc",
+        ]
         for suffix in suffixes:
             name = name.lower().replace(suffix, "")
         return string.capwords(name, sep=None)
@@ -72,7 +81,9 @@ class YahooRequests:
         response = requests.get(url, headers=HEADERS, timeout=10)
         # Check if response was "ok"
         if response.status_code != HTTPStatus.OK:
-            raise ConversionError(f"[{response.status_code}] - Failed to fetch ticker symbol")
+            raise ConversionError(
+                f"[{response.status_code}] - Failed to fetch ticker symbol"
+            )
         # Convert to json format so it is indexable
         data = response.json()
         # Unpack currency
@@ -94,14 +105,18 @@ class YahooRequests:
 
         Raises ConversionError if the request wasn't successful.
         """
-        response = requests.get(API_URL_TEMPLATE.format(ticker=ticker), headers=HEADERS, timeout=10)
+        response = requests.get(
+            API_URL_TEMPLATE.format(ticker=ticker), headers=HEADERS, timeout=10
+        )
 
         if response.status_code != HTTPStatus.OK:
-            raise ConversionError(f"[{response.status_code}] - Failed to fetch ticker symbol")
+            raise ConversionError(
+                f"[{response.status_code}] - Failed to fetch ticker symbol"
+            )
 
         try:
             # Convert to Json format and find price
-            data = response.json()['optionChain']['result'][0]['quote']
+            data = response.json()["optionChain"]["result"][0]["quote"]
         except IndexError as exc:
             # If price could not be found raise conversionerror
             # This may occur because the ticker is incorrect or non-existand
@@ -116,7 +131,7 @@ class YahooRequests:
         Raises ConversionError if the ticker symbol is invalid.
         """
         try:
-            price_usd = cls.request_ticker_info(ticker)['regularMarketPrice']
+            price_usd = cls.request_ticker_info(ticker)["regularMarketPrice"]
         except LookupError as exc:
             raise ConversionError(ticker) from exc
         if convert_currency:
@@ -131,7 +146,7 @@ class YahooRequests:
         Raises ConversionError if the ticker symbol is invalid.
         """
         try:
-            name = cls.request_ticker_info(ticker)['shortName']
+            name = cls.request_ticker_info(ticker)["shortName"]
         except LookupError as exc:
             raise ConversionError(ticker) from exc
         # Check if the name only consist of numbers,

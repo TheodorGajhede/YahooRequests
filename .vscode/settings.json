@@ -12,7 +12,7 @@
 
 
     ],
-    "editor.minimap.enabled": false,
+    "editor.minimap.enabled": true,
     "terminal.explorerKind": "both",
     "npm.runInTerminal": false,
     "terminal.integrated.profiles.windows": {
