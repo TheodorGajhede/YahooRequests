@@ -1,4 +1,4 @@
-name: YahooRequests
+name: YahooRequests Test & Run
 on:
   push:
     branches:
