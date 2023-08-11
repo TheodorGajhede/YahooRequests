@@ -4,22 +4,24 @@ on:
     branches:
       - main
 jobs:
-  test_yahoorequests:
+  YahooRequests:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout code
       - uses: actions/checkout@v2
+      # Step 2: Set up Python, install dependencies
       - uses: actions/setup-python@v2
         with:
           python-version: 3.8
+        name: install dependencies
       - run: pip install requests
       - run: pip install pytest
-      - run: pytest test_yahoorequests.py
-  get_stock_price:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - run: pip install requests
-      - run: python YahooRequests/yahoorequests.py
+      # Step 4: Define environment variables
+      - name: Set environment variables
+        run: echo "OER=${{ secrets.OER }}" >> $GITHUB_ENV
+      # Step 5: Test the program
+      - name: Run tests
+      - run: pytest test_project.py
+      # Step 6: Run the code
+      - name: Run my script
+        run: python YahooRequests/yahoorequests.py
