@@ -26,7 +26,7 @@ jobs:
         run: echo "OER=${{ secrets.OER }}" >> $GITHUB_ENV
       # Step 5: Test the program
       - name: Run tests
-        run: pytest test_project.py
+        run: pytest test_yahoorequests.py
       # Step 6: Run the code
       - name: Run my script
         run: python YahooRequests/yahoorequests.py
