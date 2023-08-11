@@ -1,3 +1,7 @@
 .vscode/
 .devcontainer/
 poetry.lock
+__pycahce__/
+YahooRequests/__pycache__/
+.pytest_cache/
+visions.txt

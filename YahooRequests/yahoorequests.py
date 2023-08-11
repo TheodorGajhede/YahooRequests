@@ -2,6 +2,7 @@ from http import HTTPStatus
 import string
 import os
 import requests
+from tabulate import tabulate
 
 
 API_URL_TEMPLATE = 'https://query1.finance.yahoo.com/v7/finance/options/{ticker}'
@@ -17,19 +18,39 @@ HEADERS = {
 
 
 class ConversionError(Exception):
-    ''' Error that will be raised if converting a ticker is not succesfull'''
+    """Error that will be raised if converting a ticker is not succesfull."""
+
     def __init__(self, response):
+        """Response is set."""
         self.response = response
 
     def __str__(self):
+        """Define the standart response."""
         return f"[{self.response}] - Failed to fetch ticker symbol"
 
 
 class YahooRequests:
-    ''' The class for YahooRequests, having different features for stock extracting'''
-    
+    """The class for YahooRequests, having different features for stock extracting."""
+
+    @classmethod
+    def basic_info(cls, ticker):
+        """Give table with the values of the compnay and other information."""
+        response = cls.request_ticker_info(ticker)
+        table = [
+                ["Name: ", cls.name(ticker)],
+                ["Current price: ", f"${cls.price(ticker)}"],
+                ["Region: ", response["region"]],
+                ["Language: ", response["language"]],
+                ["Exhange: ", response["fullExchangeName"]],
+                ["Average analyst rating: ", response["averageAnalystRating"]],
+                ["Fifty day average price: ", response["fiftyDayAverage"]],
+                ["Twohundred day average: ", response["twoHundredDayAverage"]]
+                ]
+        return tabulate(table, tablefmt="mixed_grid")
+
     @staticmethod
     def remove_suffix(name):
+        """Remove the ending suffix like Inc. in Alphabet Inc."""
         suffixes = [
                     "corp.", ",", "co.",
                     "ltd.", "plc", "sa", "ag",
@@ -39,10 +60,10 @@ class YahooRequests:
         for suffix in suffixes:
             name = name.lower().replace(suffix, "")
         return string.capwords(name, sep=None)
-    
+
     @staticmethod
     def converted_currency(price: int, currency: str) -> int:
-        ''' Convert the price to a different currency using OER'''
+        """Convert the price to a different currency using OER."""
         # Acces the workflow defined OER Key using os
         api_key = os.environ["OER_KEY"]
         # Use the OpenExhangeRates api to get current currency rates
@@ -56,7 +77,7 @@ class YahooRequests:
         data = response.json()
         # Unpack currency
         if isinstance(currency, tuple):
-            unpacked_currency = currency[0]    
+            unpacked_currency = currency[0]
         else:
             unpacked_currency = currency
         # Index to the location of the uppercase version of the chosen curreny
@@ -69,11 +90,10 @@ class YahooRequests:
     @staticmethod
     def request_ticker_info(ticker: str) -> dict:
         """
-        Fetches the data for the desired ticker symbol
+        Fetch the data for the desired ticker symbol.
 
         Raises ConversionError if the request wasn't successful.
         """
-
         response = requests.get(API_URL_TEMPLATE.format(ticker=ticker), headers=HEADERS, timeout=10)
 
         if response.status_code != HTTPStatus.OK:
@@ -90,36 +110,34 @@ class YahooRequests:
 
     @classmethod
     def price(cls, ticker: str, *convert_currency) -> int:
-        '''
-        Gets the current price of the stock with the given ticker symbol.
+        """
+        Get the current price of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
-        '''
+        """
         try:
             price_usd = cls.request_ticker_info(ticker)['regularMarketPrice']
-        except LookupError:
-            raise ConversionError(ticker)
+        except LookupError as exc:
+            raise ConversionError(ticker) from exc
         if convert_currency:
             return cls.converted_currency(price_usd, convert_currency)
-        else:
-            return price_usd
+        return price_usd
 
     @classmethod
     def name(cls, ticker: str, remove_suffix=False) -> str:
         """
-        Gets the company name of the stock with the given ticker symbol.
+        Get the company name of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
         """
         try:
             name = cls.request_ticker_info(ticker)['shortName']
-        except LookupError:
-            raise ConversionError(ticker)
-        # Check if the name only consist of numbers, and therefore is not what the user is looking for
+        except LookupError as exc:
+            raise ConversionError(ticker) from exc
+        # Check if the name only consist of numbers,
+        # and therefore is not what the user is looking for
         if name.isnumeric():
             raise ConversionError(f"{ticker} fetches number instead of str")
-        else:
-            if remove_suffix is not False:
-                return cls.remove_suffix(name)
-            else:
-                return name
+        if remove_suffix is not False:
+            return cls.remove_suffix(name)
+        return name

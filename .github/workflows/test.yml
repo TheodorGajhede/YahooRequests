@@ -1,4 +1,4 @@
-name: YahooRequests Run
+name: YahooRequests Test
 on:
   push:
     branches:
@@ -21,9 +21,11 @@ jobs:
           pip install requests
       - name: Install tabulate
         run: pip install tabulate
+      - name: Install pytest
+        run: pip install pytest
       # Step 4: Define environment variables
       - name: Set environment variables
         run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV
-      # Step 6: Run the code
-      - name: Run my script
-        run: python YahooRequests/yahoorequests.py
+      # Step 5: Test the program
+      - name: Run tests
+        run: pytest test_yahoorequests.py
