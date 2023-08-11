@@ -57,7 +57,10 @@ class YahooRequests:
         else:
             unpacked_currency = currency
         # Index to the location of the uppercase version of the chosen curreny
-        converted_price = data["rates"][unpacked_currency.upper()] * price
+        try:
+            converted_price = data["rates"][unpacked_currency.upper()] * price
+        except LookupError:
+            return data
         return round(converted_price, 2)
 
     @staticmethod
