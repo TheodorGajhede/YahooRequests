@@ -23,7 +23,7 @@ jobs:
         run: pip install pytest
       # Step 4: Define environment variables
       - name: Set environment variables
-        run: echo "OER=${{ secrets.OER }}" >> $GITHUB_ENV
+        run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV
       # Step 5: Test the program
       - name: Run tests
         run: pytest test_yahoorequests.py

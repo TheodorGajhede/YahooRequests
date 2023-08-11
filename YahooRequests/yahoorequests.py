@@ -44,11 +44,14 @@ class YahooRequests:
     def converted_currency(price: int, currency: str) -> int:
         ''' Convert the price to a different currency using OER'''
         # Acces the workflow defined OER Key using os
-        api_key = os.environ["OER"]
+        api_key = os.environ["OER_KEY"]
         # Use the OpenExhangeRates api to get current currency rates
         url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
         # Use requests to define as variable
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        # Check if response was "ok"
+        if response.status_code != HTTPStatus.OK:
+            raise ConversionError(f"[{response.status_code}] - Failed to fetch ticker symbol")
         # Convert to json format so it is indexable
         data = response.json()
         # Unpack currency
