@@ -41,7 +41,7 @@ class YahooRequests:
             ["Current price: ", f"${cls.price(ticker)}"],
             ["Region: ", response["region"]],
             ["Language: ", response["language"]],
-            ["Exhange: ", response["fullExchangeName"]],
+            ["Exchange: ", response["fullExchangeName"]],
             ["Average analyst rating: ", response["averageAnalystRating"]],
             ["Fifty day average price: ", response["fiftyDayAverage"]],
             ["Twohundred day average: ", response["twoHundredDayAverage"]],
