@@ -3,7 +3,12 @@
 A small Python library for getting prices and full names of companies using Yahoo.
 
 [![Github Page](https://img.shields.io/badge/Github-000?logo="github")](https://github.com/TheodorGajhede/YahooRequests/tree/main) 
-![Python Versions ](https://img.shields.io/badge/Python-3.7--3.12-259?logo="python") ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/TheodorGajhede/YahooRequests) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/TheodorGajhede/YahooRequests/main.yml?&style=flat&logo=github)
+![Python Versions ](https://img.shields.io/badge/Python-3.7--3.12-259?logo="python") ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/TheodorGajhede/YahooRequests) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/TheodorGajhede/YahooRequests/main?label=Last%20commit) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/TheodorGajhede/YahooRequests/build.yml?style=flat&logo=github&label=Build)![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/TheodorGajhede/YahooRequests/unit_test.yml?style=flat&logo=github&label=Unit%20test)  ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/TheodorGajhede/YahooRequests/test_publish.yml?style=flat&logo=github&label=Test%20publish)![GitHub](https://img.shields.io/github/license/TheodorGajhede/YahooRequests?label=License)
+
+
+
+
+
 
 
 ## Installation
@@ -29,7 +34,7 @@ converted_price = yr.price("googl", "eur")
 no_suffix_name = yr.name("googl", suffix=False)
 
 # Return simple table with different information
-table_company = yr.basic_info("google")
+table_company = yr.basic_info("googl")
 '''
 example:
 ┍━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━━━━━┑
@@ -49,6 +54,14 @@ example:
 ├──────────────────────────┼───────────────┤
 │ Twohundred day average:  │ 105.4         │
 ┕━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━━━━━┙
+'''
+
+# Return the most popular news article about a company
+# This feature is early acces and might not function properly
+# The function will write a warning which can be disable by adding warning=False
+news = yr.news("googl")
+'''
+
 '''
 ```
 

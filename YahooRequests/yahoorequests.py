@@ -32,8 +32,10 @@ class ConversionError(Exception):
 class YahooRequests:
     """The class for YahooRequests, having different features for stock extracting."""
 
+    index = -1
+
     @classmethod
-    def basic_info(cls, ticker):
+    def basic_info(cls, ticker: str) -> tabulate:
         """Give table with the values of the compnay and other information."""
         response = cls.request_ticker_info(ticker)
         table = [
@@ -49,7 +51,7 @@ class YahooRequests:
         return tabulate(table, tablefmt="mixed_grid")
 
     @staticmethod
-    def remove_suffix(name):
+    def remove_suffix(name: str) -> str:
         """Remove the ending suffix like Inc. in Alphabet Inc."""
         suffixes = [
             "corp.",
@@ -66,9 +68,33 @@ class YahooRequests:
             "sh",
             "inc",
         ]
+        # Loop through every suffix and remove it
         for suffix in suffixes:
             name = name.lower().replace(suffix, "")
         return string.capwords(name, sep=None)
+
+    @staticmethod
+    def news(ticker: str, index=-1, warning=True) -> str:
+        '''get news for a company using the news api'''
+        if warning:
+            print("Warning this feature is not yet fully functional\
+                and may not generate a correct article\
+                    \n\
+                to disable this warning add the argument warning=False")
+        index += 1
+        url_news = (f'https://newsapi.org/v2/everything?'
+                    f'q={ticker}&'
+                    f'from=2023-08-10&'
+                    f'sortBy=popularity&'
+                    f'apiKey={os.environ["NEWS_KEY"]}'
+                    )
+        response = requests.get(url_news, timeout=10).json()
+        # Return the formatted string of the news article
+        return f'{response["articles"][index]["title"]} \
+            \n {response["articles"][index]["description"]} \
+            \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
+            {response["articles"][index]["source"]["name"].lstrip()}\
+            \n Read the full article at: {response["articles"][index]["url"]}'
 
     @staticmethod
     def converted_currency(price: int, currency: str) -> int:
@@ -124,7 +150,7 @@ class YahooRequests:
         return data
 
     @classmethod
-    def price(cls, ticker: str, *convert_currency) -> int:
+    def price(cls, ticker: str, *convert_currency: str) -> int:
         """
         Get the current price of the stock with the given ticker symbol.
 
@@ -134,6 +160,7 @@ class YahooRequests:
             price_usd = cls.request_ticker_info(ticker)["regularMarketPrice"]
         except LookupError as exc:
             raise ConversionError(ticker) from exc
+        # If user added the convert arg, convert the price to in included currency
         if convert_currency:
             return cls.converted_currency(price_usd, convert_currency)
         return price_usd

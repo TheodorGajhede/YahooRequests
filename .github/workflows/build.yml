@@ -23,7 +23,7 @@ jobs:
         run: pip install tabulate
       # Step 4: Define environment variables
       - name: Set environment variables
-        run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV
+        run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV; echo "NEWS_KEY=${{ secrets.NEWS_KEY }}" >> $GITHUB_ENV
       # Step 6: Run the code
       - name: Run my script
         run: python YahooRequests/yahoorequests.py
