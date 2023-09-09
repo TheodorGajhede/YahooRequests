@@ -1,3 +1,7 @@
+'''
+This is tests
+'''
+
 from YahooRequests import YahooRequests
 
 
