@@ -4,7 +4,7 @@
 visions.txt
 
 # Different caches that will automatically be made anyway
-__pycahce__/
+__pycache__/*
 .mypy_cache
 YahooRequests/__pycache__/
 .pytest_cache/
