@@ -59,9 +59,13 @@ example:
 # Return the most popular news article about a company
 # This feature is early acces and might not function properly
 # The function will write a warning which can be disable by adding warning=False
+# This doesnt always make much sense, and not always about the company here is a exanple of a bad article
 news = yr.news("googl")
 '''
-
+These are the top 10 holdings of the Mormon Church's $49 billion stock portfolio             
+ The Church of Jesus Christ of Latter-day Saints' has an investment portfolio topping $100 billion that includes $49.3 billion invested in stocks.             
+ Published at 2023-08-14 by:            Business Insider            
+ Read the full article at: https://markets.businessinsider.com/news/stocks/mormon-church-49-billion-stock-portfolio-top-holdings-ensign-peak-2023-8
 '''
 ```
 

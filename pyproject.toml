@@ -7,7 +7,7 @@ name = "YahooRequests"
 packages = [
     { include = "YahooRequests" }
 ]
-version = "1.0"
+version = "1.1"
 description = "A simple Python library for getting stock prices and company names from Yahoo Finance."
 authors = ["Theodor Gajhede <theodorgajhede@gmail.com>"]
 include = ['CHANGELOG.md', 'LICENSE']
@@ -22,7 +22,7 @@ keywords = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.4"
+python = ">=3.0"
 requests = ">=2.27.1"
 tabulate = ">=0.9.0"
 

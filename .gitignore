@@ -1,7 +1,10 @@
+# My settings:
 .vscode/
 .devcontainer/
-poetry.lock
+visions.txt
+
+# Different caches that will automatically be made anyway
 __pycahce__/
+.mypy_cache
 YahooRequests/__pycache__/
 .pytest_cache/
-visions.txt

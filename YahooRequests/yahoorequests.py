@@ -1,3 +1,9 @@
+
+'''This is a module for extracitng stock data from Yahoo Finance
+
+    An more in-depth guide is in the README file
+'''
+
 from http import HTTPStatus
 import string
 import os
@@ -30,17 +36,17 @@ class ConversionError(Exception):
 
 
 class YahooRequests:
-    """The class for YahooRequests, having different features for stock extracting."""
+    """The class YahooRequests, having different features for stock extracting."""
 
     index = -1
 
     @classmethod
-    def basic_info(cls, ticker: str) -> tabulate:
+    def basic_info(cls, ticker: str) -> str:
         """Give table with the values of the compnay and other information."""
         response = cls.request_ticker_info(ticker)
         table = [
             ["Name: ", cls.name(ticker)],
-            ["Current price: ", f"${cls.price(ticker)}"],
+            ["Current price: ", f"${cls.price(ticker, convert_currency='usd')}"],
             ["Region: ", response["region"]],
             ["Language: ", response["language"]],
             ["Exchange: ", response["fullExchangeName"]],
@@ -97,7 +103,7 @@ class YahooRequests:
             \n Read the full article at: {response["articles"][index]["url"]}'
 
     @staticmethod
-    def converted_currency(price: int, currency: str) -> int:
+    def converted_currency(price: int, currency) -> int:
         """Convert the price to a different currency using OER."""
         # Acces the workflow defined OER Key using os
         api_key = os.environ["OER_KEY"]
@@ -112,14 +118,9 @@ class YahooRequests:
             )
         # Convert to json format so it is indexable
         data = response.json()
-        # Unpack currency
-        if isinstance(currency, tuple):
-            unpacked_currency = currency[0]
-        else:
-            unpacked_currency = currency
         # Index to the location of the uppercase version of the chosen curreny
         try:
-            converted_price = data["rates"][unpacked_currency.upper()] * price
+            converted_price = data["rates"][currency.upper()] * price
         except LookupError:
             return data
         return round(converted_price, 2)
@@ -150,7 +151,7 @@ class YahooRequests:
         return data
 
     @classmethod
-    def price(cls, ticker: str, *convert_currency: str) -> int:
+    def price(cls, ticker: str, convert_currency="usd") -> int:
         """
         Get the current price of the stock with the given ticker symbol.
 
