@@ -7,9 +7,9 @@
 from http import HTTPStatus
 import string
 import os
+import datetime
 import requests
 from tabulate import tabulate
-import datetime
 
 
 API_URL_TEMPLATE = "https://query1.finance.yahoo.com/v7/finance/options/{ticker}"
