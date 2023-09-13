@@ -1,6 +1,6 @@
 # Changelog for YahooRequests By Theodor Gajhede
 
-* Version 1.1 (September 10, 2023)
+* Version 1.1 (September 12, 2023)
     - Introduced a feature to display a comprehensive table of essential information.
     - Implemented the capability to convert stock data to alternative currencies via the .price method.
     - Added a "remove suffix" function to eliminate common company suffixes such as Co. or Inc.
