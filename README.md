@@ -34,7 +34,7 @@ no_suffix_name = yr.name("googl", suffix=False)
 table_company = yr.basic_info("googl")
 
 # Return the most popular news article about a company (Early access feature)
-news = yr.news("googl")
+news = yr.news("googl", timespan=5, warning=True)
 ```
 
 ## Footnotes

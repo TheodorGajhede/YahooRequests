@@ -9,6 +9,7 @@ import string
 import os
 import requests
 from tabulate import tabulate
+import datetime
 
 
 API_URL_TEMPLATE = "https://query1.finance.yahoo.com/v7/finance/options/{ticker}"
@@ -80,27 +81,40 @@ class YahooRequests:
         return string.capwords(name, sep=None)
 
     @staticmethod
-    def news(ticker: str, index=-1, warning=True) -> str:
+    def news(ticker: str, timespan=5, index=-1, warning=True) -> str:
         '''get news for a company using the news api'''
-        if warning:
-            print("Warning this feature is not yet fully functional\
-                and may not generate a correct article\
-                    \n\
-                to disable this warning add the argument warning=False")
+        warning = (
+                "Warning this feature is not yet fully functional\
+ and may not generate a correct article\n\
+to disable this warning add the argument warning=False")
+        currentdate = datetime.datetime.now()
+        timedata = currentdate - datetime.timedelta(days=timespan)
         index += 1
         url_news = (f'https://newsapi.org/v2/everything?'
                     f'q={ticker}&'
-                    f'from=2023-08-10&'
+                    f'from={timedata.strftime("%Y-%m-%d")}&'
                     f'sortBy=popularity&'
                     f'apiKey={os.environ["NEWS_KEY"]}'
                     )
         response = requests.get(url_news, timeout=10).json()
         # Return the formatted string of the news article
-        return f'{response["articles"][index]["title"]} \
-            \n {response["articles"][index]["description"]} \
-            \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
-            {response["articles"][index]["source"]["name"].lstrip()}\
-            \n Read the full article at: {response["articles"][index]["url"]}'
+        # try:
+        if warning:
+            newsformatted = f'{warning}\n\n{response["articles"][index]["title"]} \
+                    \n {response["articles"][index]["description"]} \
+                    \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
+                    {response["articles"][index]["source"]["name"].lstrip()}\
+                    \n Read the full article at: {response["articles"][index]["url"]}'
+        else:
+            newsformatted = f'\n{response["articles"][index]["title"]} \
+                    \n {response["articles"][index]["description"]} \
+                    \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
+                    {response["articles"][index]["source"]["name"].lstrip()}\
+                    \n Read the full article at: {response["articles"][index]["url"]}'
+        # except KeyError:
+        #   newsformatted = "This feature has expired, broken or bugged, please do not use"
+
+        return newsformatted
 
     @staticmethod
     def converted_currency(price: int, currency) -> int:
