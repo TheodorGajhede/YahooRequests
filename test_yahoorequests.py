@@ -6,9 +6,11 @@ from YahooRequests import YahooRequests
 
 
 def test_price():
-    '''Test the mathod for getting price'''
+    '''Test the method for getting price'''
     assert isinstance(YahooRequests.price("googl"), float)
     assert isinstance(YahooRequests.price("aapl"), float)
+    test_list = ["aapl", "googl", "pi", "plug"]
+    assert isinstance(YahooRequests.price(test_list), dict)
 
 
 def test_name():
@@ -33,6 +35,7 @@ def test_suffix():
 def test_basic_info():
     '''Test the method for priting a table of basic info'''
     assert isinstance(YahooRequests.basic_info("aapl"), str)
+    assert isinstance(YahooRequests.basic_info("aapl", dictionary=True), dict)
 
 
 def test_news():

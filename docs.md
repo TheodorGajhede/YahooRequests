@@ -1,0 +1,129 @@
+## This module for extracting stock data from Yahoo Finance
+
+This module provides a number of functions for extracting stock data from Yahoo Finance. The data that can be extracted includes:
+
+* Basic information about a company, such as its name, current price, region, language, exchange, average analyst rating, fifty day average price, and two-hundred day average price.
+* News articles about a company.
+* The current price of a stock, in USD or converted to another currency.
+* The company name of a stock.
+
+### Usage
+
+The module can be used as follows:
+
+```python
+import YahooRequests as yf
+
+# Get the basic information about a company
+ticker = "AAPL"
+basic_info = yf.basic_info(ticker)
+
+# Get news articles about a company
+ticker = "AAPL"
+news = yf.news(ticker)
+
+# Get the current price of a stock, in USD
+ticker = "AAPL"
+price = yf.price(ticker)
+
+# Get the current price of a stock, converted to EUR
+ticker = "AAPL"
+price_eur = yf.price(ticker, convert_currency="eur")
+
+# Get the company name of a stock
+ticker = "AAPL"
+company_name = yf.name(ticker)
+```
+
+### Example
+
+The following example shows how to use the module to get the basic information about Apple and print it to the console:
+
+
+```python
+import YahooRequests as yf
+
+# Get the basic information about Apple
+ticker = "AAPL"
+basic_info = yf.basic_info(ticker)
+
+# Print the basic information to the console
+print(basic_info)
+```
+Output:
+```python
+[
+    ["Name:", "Apple Inc."],
+    ["Current price:", "$150.00"],
+    ["Region:", "United States"],
+    ["Language:", "English"],
+    ["Exchange:", "Nasdaq"],
+    ["Average analyst rating:", "Strong Buy"],
+    ["Fifty day average price:", "$145.00"],
+    ["Twohundred day average price:""$130.00"]
+]
+```
+
+
+### Documentation for individual functions
+
+The following is more detailed documentation for each of the functions in the module:
+
+#### `basic_info()`
+
+The `basic_info()` function returns a dictionary of basic information about a company, such as its name, current price, region, language, exchange, average analyst rating, fifty day average price, and two-hundred day average price.
+
+**Parameters:**
+
+* `ticker`: The ticker symbol of the company.
+
+**Returns:**
+
+A dictionary of basic information about the company.
+
+#### `news()`
+
+The `news()` function returns a list of news articles about a company.
+
+**Parameters:**
+
+* `ticker`: The ticker symbol of the company.
+* `timespan`: The number of days to go back in time to get news articles for. (Default: 5)
+* `index`: The index of the news article to return. (Default: -1, which returns the most recent article)
+* `warning`: Whether to show a warning message that the news feature is not yet fully functional. (Default: True)
+
+**Returns:**
+
+A list of news articles about the company.
+
+#### `price()`
+
+The `price()` function returns the current price of a stock, in USD or converted to another currency.
+
+**Parameters:**
+
+* `ticker`: The ticker symbol of the stock.
+* `convert_currency`: The currency to convert the price to. (Default: "usd")
+
+**Returns:**
+
+The current price of the stock, in the specified currency.
+
+#### `name()`
+
+The `name()` function returns the company name of a stock.
+
+**Parameters:**
+
+* `ticker`: The ticker symbol of the stock.
+* `remove_suffix`: Whether to remove common suffixes from the company name, such as "Inc." or "Corp.". (Default: False)
+
+**Returns:**
+
+The company name of the stock.
+
+### Additional notes
+
+Please note that the Yahoo Finance API has been shut down, so this module uses a workaround to make it appear to be a browser in order to fetch data. This workaround may not work in the future.
+
+Also, please note that the news feature is not yet fully functional and may not generate a correct article

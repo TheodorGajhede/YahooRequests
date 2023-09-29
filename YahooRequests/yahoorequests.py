@@ -42,20 +42,33 @@ class YahooRequests:
     index = -1
 
     @classmethod
-    def basic_info(cls, ticker: str) -> str:
+    def basic_info(cls, ticker: str, dictionary=False) -> str | dict:
         """Give table with the values of the compnay and other information."""
         response = cls.request_ticker_info(ticker)
-        table = [
-            ["Name: ", cls.name(ticker)],
-            ["Current price: ", f"${cls.price(ticker, convert_currency='usd')}"],
-            ["Region: ", response["region"]],
-            ["Language: ", response["language"]],
-            ["Exchange: ", response["fullExchangeName"]],
-            ["Average analyst rating: ", response["averageAnalystRating"]],
-            ["Fifty day average price: ", response["fiftyDayAverage"]],
-            ["Twohundred day average: ", response["twoHundredDayAverage"]],
-        ]
-        return tabulate(table, tablefmt="mixed_grid")
+        if not dictionary:
+            table = [
+                ["Name: ", cls.name(ticker)],
+                ["Current price: ", f"${cls.price(ticker, convert_currency='usd')}"],
+                ["Region: ", response["region"]],
+                ["Language: ", response["language"]],
+                ["Exchange: ", response["fullExchangeName"]],
+                ["Average analyst rating: ", response["averageAnalystRating"]],
+                ["Fifty day average price: ", response["fiftyDayAverage"]],
+                ["Twohundred day average: ", response["twoHundredDayAverage"]],
+            ]
+            return tabulate(table, tablefmt="mixed_grid")
+
+        table = {
+            "Name: ": cls.name(ticker),
+            "Current price: ": f"${cls.price(ticker, convert_currency='usd')}",
+            "Region: ": response["region"],
+            "Language: ": response["language"],
+            "Exchange: ": response["fullExchangeName"],
+            "Average analyst rating: ": response["averageAnalystRating"],
+            "Fifty day average price: ": response["fiftyDayAverage"],
+            "Twohundred day average: ": response["twoHundredDayAverage"]
+        }
+        return table
 
     @staticmethod
     def remove_suffix(name: str) -> str:
@@ -165,12 +178,21 @@ to disable this warning add the argument warning=False")
         return data
 
     @classmethod
-    def price(cls, ticker: str, convert_currency="usd") -> int:
+    def price(cls, ticker: str | list, convert_currency="usd") -> int | dict:
         """
         Get the current price of the stock with the given ticker symbol.
 
         Raises ConversionError if the ticker symbol is invalid.
         """
+        if isinstance(ticker, list):
+            price_list = []
+            for tick in ticker:
+                try:
+                    price_list.append(cls.request_ticker_info(tick)["regularMarketPrice"])
+                except ConversionError:
+                    price_list.append("error")
+            return dict(zip(ticker, price_list))
+
         try:
             price_usd = cls.request_ticker_info(ticker)["regularMarketPrice"]
         except LookupError as exc:
