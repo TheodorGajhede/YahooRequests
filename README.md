@@ -35,6 +35,9 @@ table_company = yr.basic_info("googl")
 
 # Return the most popular news article about a company (Early access feature)
 news = yr.news("googl", timespan=5, warning=True)
+
+# Return the average price of a stock in a time period
+average_price = yr.average_price("aapl", 2021-1-1, 2022-1-1)
 ```
 
 ## Footnotes

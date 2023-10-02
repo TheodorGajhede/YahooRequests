@@ -12,27 +12,31 @@ This module provides a number of functions for extracting stock data from Yahoo 
 The module can be used as follows:
 
 ```python
-import YahooRequests as yf
+import YahooRequests as yr
 
 # Get the basic information about a company
 ticker = "AAPL"
-basic_info = yf.basic_info(ticker)
+basic_info = yr.basic_info(ticker)
 
 # Get news articles about a company
 ticker = "AAPL"
-news = yf.news(ticker)
+news = yr.news(ticker)
 
 # Get the current price of a stock, in USD
 ticker = "AAPL"
-price = yf.price(ticker)
+price = yr.price(ticker)
 
 # Get the current price of a stock, converted to EUR
 ticker = "AAPL"
-price_eur = yf.price(ticker, convert_currency="eur")
+price_eur = yr.price(ticker, convert_currency="eur")
 
 # Get the company name of a stock
 ticker = "AAPL"
-company_name = yf.name(ticker)
+company_name = yr.name(ticker)
+
+# Get the average analyst rating of a stock
+ticker = "AAPL"
+average_analyst_rating = yr.rating(ticker)
 ```
 
 ### Example
@@ -41,11 +45,11 @@ The following example shows how to use the module to get the basic information a
 
 
 ```python
-import YahooRequests as yf
+import YahooRequests as yr
 
 # Get the basic information about Apple
 ticker = "AAPL"
-basic_info = yf.basic_info(ticker)
+basic_info = yr.basic_info(ticker)
 
 # Print the basic information to the console
 print(basic_info)
@@ -102,7 +106,7 @@ The `price()` function returns the current price of a stock, in USD or converted
 
 **Parameters:**
 
-* `ticker`: The ticker symbol of the stock.
+* `ticker`: The ticker symbol of the company.
 * `convert_currency`: The currency to convert the price to. (Default: "usd")
 
 **Returns:**
@@ -115,12 +119,38 @@ The `name()` function returns the company name of a stock.
 
 **Parameters:**
 
-* `ticker`: The ticker symbol of the stock.
+* `ticker`: The ticker symbol of the company.
 * `remove_suffix`: Whether to remove common suffixes from the company name, such as "Inc." or "Corp.". (Default: False)
 
 **Returns:**
 
 The company name of the stock.
+
+#### `rating()`
+
+The `rating()` function returns a average analyst rating of a stock
+
+**Parameters:**
+
+* `ticker`: The ticker symbol of the company.
+
+**Returns:**
+
+An integer representing the average analyst rating
+
+#### `average_price()`
+
+The `average_price()` function returns the average price of a stock in a time period
+
+**Parameters**
+
+* ticker: The ticker symbol of the stock.
+* start: The start date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
+* end: The end date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
+
+**Returns**
+
+The average price of the stock for the given date range.
 
 ### Additional notes
 

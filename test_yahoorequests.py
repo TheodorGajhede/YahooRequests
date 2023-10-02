@@ -2,6 +2,7 @@
 This is tests
 '''
 
+import pytest
 from YahooRequests import YahooRequests
 
 
@@ -42,3 +43,16 @@ def test_news():
     '''Test the method and api for getting news'''
     assert isinstance(YahooRequests.news("googl"), str)
     assert YahooRequests.news("googl") is not YahooRequests.news("googl", warning=False)
+
+
+def test_invalid_average_price():
+    '''Test the error catching of average price'''
+    # Test that an error is raised when the start date is after the end date
+    with pytest.raises(TypeError):
+        YahooRequests.average_price("AAPL", "2023-10-05", "2023-10-01")
+    # Test that n error is raised when the ticker is not a valid string
+    with pytest.raises(TypeError):
+        YahooRequests.average_price(123, "2023-10-01", "2023-10-05")  # type: ignore
+    # Test that n error is raised when the start and end dates are not valid strings
+    with pytest.raises(TypeError):
+        YahooRequests.average_price("AAPL", 123, 456)  # type: ignore
