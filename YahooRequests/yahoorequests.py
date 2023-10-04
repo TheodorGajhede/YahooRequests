@@ -202,6 +202,7 @@ class YahooRequests:
 
     @classmethod
     def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval: str) -> list:
+
         """
         Retrive daily prices of a stock from end- and startdate
 
@@ -219,6 +220,7 @@ class YahooRequests:
             ConnectionError: If the connection to Yahoo Finance fails.
             JSONDecodeError: If the JSON data returned by Yahoo Finance is invalid.
         """
+
         try:
             # Connvert values to datetime type
             if isinstance(start, datetime.date):
@@ -229,27 +231,27 @@ class YahooRequests:
             unix_start = int(datetime.datetime.strptime(start, "%Y-%m-%d").timestamp())
             unix_end = int(datetime.datetime.strptime(end, "%Y-%m-%d").timestamp())
             # If start is after end, raise a error
-            if interval not in ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]:
-                raise TypeError(
-                    f'Error Interval of {interval}, is not in list of usable intervals: ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]'
-                )
             if unix_end < unix_start:
                 raise TypeError(
                     f"Error Start date cannnot be after the end date. startDate = {start} endDate = {end}"
                 )
             # This link will look kinda funky because i am stupid
-            link = f"""
-    https://query1.finance.yahoo.com/v7/finance/chart/{ticker}?period1={unix_start}&period2={unix_end}&interval={interval}
-                    """
-            value = requests.get(link, timeout=10, headers=HEADERS)
-            value = value.json()
+            link = f"https://query1.finance.yahoo.com/v7/finance/chart/{ticker}?period1={unix_start}&period2={unix_end}&interval={interval}"
+            # Make the request to Yahoo Finance
+            response = requests.get(link, timeout=10, headers=HEADERS)
+            # Check the status code of the response
+            if response.status_code != 200:
+                raise ConnectionError(f"Error connecting to Yahoo Finance. Status code: {response.status_code}")
+            # Parse the JSON response
+            data = response.json()
+            # Extract the list of price values
+            prices = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+            return prices
         except (ValueError, TypeError, ConnectionError) as error:
             raise ConversionError(
                 f"Error check the data and the formatting, Error Caught: {error}"
             ) from error
-        # Index to the location of the price values
-        lst = value["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
-        return lst
+
 
     @classmethod
     def average_price(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval="1d") -> float:
@@ -337,7 +339,7 @@ class YahooRequests:
         return response["averageAnalystRating"]
 
     @classmethod
-    def price(cls, ticker: str | list, convert_currency="usd") -> int | dict:
+    def price(cls, ticker: str | list, convert_currency=None) -> float | dict:
         """
         Returns the current price of one or more tickers, in different currencies
 
@@ -356,9 +358,7 @@ class YahooRequests:
             price_list = []
             for tick in ticker:
                 try:
-                    price_list.append(
-                        cls.request_ticker_info(tick)["regularMarketPrice"]
-                    )
+                    price_list.append(cls.request_ticker_info(tick)["regularMarketPrice"])
                 except ConversionError:
                     price_list.append("error")
             return dict(zip(ticker, price_list))
@@ -367,9 +367,10 @@ class YahooRequests:
             price_usd = cls.request_ticker_info(ticker)["regularMarketPrice"]
         except LookupError as exc:
             raise ConversionError(ticker) from exc
+
         # If user added the convert arg, convert the price to in included currency
         if convert_currency:
-            return cls.converted_currency(price_usd, convert_currency)  # type: ignore
+            return cls.converted_currency(price_usd, convert_currency)
         return price_usd
 
     @classmethod
