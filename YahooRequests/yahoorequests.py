@@ -396,6 +396,7 @@ class YahooRequests:
         # and therefore is not what the user is looking for
         if name.isnumeric():
             raise ConversionError(f"{ticker} fetches number instead of str")
+        # Return a version of the code with the suffix removed
         if remove_suffix is not False:
             return cls.remove_suffix(name)
         return name
