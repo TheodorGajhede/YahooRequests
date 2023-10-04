@@ -4,6 +4,7 @@ This is tests
 
 import pytest
 from YahooRequests import YahooRequests
+from YahooRequests.yahoorequests import ConversionError
 
 
 def test_price():
@@ -48,11 +49,18 @@ def test_news():
 def test_invalid_average_price():
     '''Test the error catching of average price'''
     # Test that an error is raised when the start date is after the end date
-    with pytest.raises(TypeError):
+    with pytest.raises(ConversionError):
         YahooRequests.average_price("AAPL", "2023-10-05", "2023-10-01")
     # Test that n error is raised when the ticker is not a valid string
     with pytest.raises(TypeError):
         YahooRequests.average_price(123, "2023-10-01", "2023-10-05")  # type: ignore
     # Test that n error is raised when the start and end dates are not valid strings
-    with pytest.raises(TypeError):
+    with pytest.raises(ConversionError):
         YahooRequests.average_price("AAPL", 123, 456)  # type: ignore
+
+
+def test_average_price():
+    '''Test the method of average price'''
+    # Test that a float will be returned
+    assert isinstance(YahooRequests.average_price("pi", "2022-1-1", "2023-1-1"), float)
+    # Test that a float will be returned

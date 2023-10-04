@@ -201,11 +201,9 @@ class YahooRequests:
         return data
 
     @classmethod
-    def average_price(
-        cls, ticker: str, start: datetime.date | str, end: datetime.date | str
-    ) -> float:
+    def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval: str) -> list:
         """
-        Calculates the average price of a given ticker for a given date range.
+        Retrive daily prices of a stock from end- and startdate
 
         Args:
             ticker: The ticker symbol of the stock.
@@ -213,7 +211,7 @@ class YahooRequests:
             end: The end date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
 
         Returns:
-            The average price of the stock for the given date range.
+            A list of prices from every day of the open market in the time period
 
         Raises:
             TypeError: If the ticker is not a string or if the start and end dates are not valid datetime objects.
@@ -231,13 +229,17 @@ class YahooRequests:
             unix_start = int(datetime.datetime.strptime(start, "%Y-%m-%d").timestamp())
             unix_end = int(datetime.datetime.strptime(end, "%Y-%m-%d").timestamp())
             # If start is after end, raise a error
+            if interval not in ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]:
+                raise TypeError(
+                    f'Error Interval of {interval}, is not in list of usable intervals: ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]'
+                )
             if unix_end < unix_start:
                 raise TypeError(
                     f"Error Start date cannnot be after the end date. startDate = {start} endDate = {end}"
                 )
             # This link will look kinda funky because i am stupid
             link = f"""
-    https://query1.finance.yahoo.com/v7/finance/chart/{ticker}?period1={unix_start}&period2={unix_end}&interval=1d
+    https://query1.finance.yahoo.com/v7/finance/chart/{ticker}?period1={unix_start}&period2={unix_end}&interval={interval}
                     """
             value = requests.get(link, timeout=10, headers=HEADERS)
             value = value.json()
@@ -247,6 +249,29 @@ class YahooRequests:
             ) from error
         # Index to the location of the price values
         lst = value["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+        return lst
+
+    @classmethod
+    def average_price(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval="1d") -> float:
+        """
+        Calculate the average price of a stock from a start date and end date.
+
+        Args:
+            ticker: The ticker symbol of the stock.
+            start: The start date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
+            end: The end date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
+
+        Returns:
+            The average price of a stock in the designated time period.
+
+        Raises:
+            Internal exceptions from the get_history:
+                TypeError: If the ticker is not a string or if the start and end dates are not valid datetime objects.
+                TypeError: If the start date is after the end date.
+                ConnectionError: If the connection to Yahoo Finance fails.
+                JSONDecodeError: If the JSON data returned by Yahoo Finance is invalid.
+        """
+        lst = cls.get_history(ticker, start, end, interval)
         # Retur the average value of all
         return round(sum(lst) / len(lst), 2)
 
