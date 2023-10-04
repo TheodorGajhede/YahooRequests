@@ -22,15 +22,6 @@ jobs:
           - name: Install tabulate
           run: pip install tabulate
   
-      - name: Install httpstatus
-        run: pip install httpstatus
-  
-      - name: Install string
-        run: pip install string
-  
-      - name: Install os
-        run: pip install os
-  
       - name: Install datetime
         run: pip install datetime
   

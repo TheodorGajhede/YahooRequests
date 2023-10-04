@@ -23,8 +23,6 @@ keywords = [
 
 [tool.poetry.dependencies]
 httpstatus>=0.9.1,<1.0.0
-string
-os
 datetime>=1.5,<2.0.0
 requests>=2.26.0,<3.0.0
 tabulate>=0.8.10,<1.0.0
