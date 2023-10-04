@@ -19,8 +19,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests
+          - name: Install tabulate
+          run: pip install tabulate
+  
+      - name: Install httpstatus
+        run: pip install httpstatus
+  
+      - name: Install string
+        run: pip install string
+  
+      - name: Install os
+        run: pip install os
+  
+      - name: Install datetime
+        run: pip install datetime
+  
+      - name: Install requests
+        run: pip install requests
+  
       - name: Install tabulate
         run: pip install tabulate
+      
       - name: Install pytest
         run: pip install pytest
       # Step 4: Define environment variables
