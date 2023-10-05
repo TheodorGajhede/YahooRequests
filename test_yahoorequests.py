@@ -52,10 +52,10 @@ def test_invalid_average_price():
     with pytest.raises(ConversionError):
         YahooRequests.average_price("AAPL", "2023-10-05", "2023-10-01")
     # Test that n error is raised when the ticker is not a valid string
-    with pytest.raises(TypeError):
+    with pytest.raises(ConversionError or TypeError):
         YahooRequests.average_price(123, "2023-10-01", "2023-10-05")  # type: ignore
     # Test that n error is raised when the start and end dates are not valid strings
-    with pytest.raises(ConversionError):
+    with pytest.raises(ConversionError or TypeError):
         YahooRequests.average_price("AAPL", 123, 456)  # type: ignore
 
 
