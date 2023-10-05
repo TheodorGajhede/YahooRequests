@@ -201,7 +201,7 @@ class YahooRequests:
         return data
 
     @classmethod
-    def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval: str) -> list:
+    def get_history(cls, ticker: str, start, end, interval: str) -> list:
 
         """
         Retrive daily prices of a stock from end- and startdate
