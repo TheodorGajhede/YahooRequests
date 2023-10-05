@@ -15,11 +15,18 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - name: Install dependencies
         run: pip install requests tabulate datetime
       # Step 4: Define environment variables
       - name: Set environment variables
         run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV; echo "NEWS_KEY=${{ secrets.NEWS_KEY }}" >> $GITHUB_ENV
       # Step 6: Run the code
-      - name: Run my script
+      - name: Run YahooRequests
         run: python YahooRequests/yahoorequests.py
