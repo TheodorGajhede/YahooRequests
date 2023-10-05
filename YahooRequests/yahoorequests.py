@@ -254,7 +254,7 @@ class YahooRequests:
 
 
     @classmethod
-    def average_price(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval="1d") -> float:
+    def average_price(cls, ticker: str, start: str, end: str, interval="1d") -> float:
         """
         Calculate the average price of a stock from a start date and end date.
 
