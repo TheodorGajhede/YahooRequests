@@ -240,18 +240,24 @@ class YahooRequests:
             # Make the request to Yahoo Finance
             response = requests.get(link, timeout=10, headers=HEADERS)
             # Check the status code of the response
-            if response.status_code != 200:
-                raise ConnectionError(f"Error connecting to Yahoo Finance. Status code: {response.status_code}")
+            if response.status_code != HTTPStatus.OK:
+                raise ConversionError(
+                    f"[{response.status_code}] - Failed to fetch ticker symbol"
+                )
             # Parse the JSON response
             data = response.json()
             # Extract the list of price values
-            prices = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+            try:
+                prices = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+            except IndexError as exc:
+                # If price could not be found raise conversionerror
+                # This may occur because the ticker is incorrect or non-existand
+                raise ConversionError(response.status_code) from exc
             return prices
         except (ValueError, TypeError, ConnectionError) as error:
             raise ConversionError(
                 f"Error check the data and the formatting, Error Caught: {error}"
             ) from error
-
 
     @classmethod
     def average_price(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval="1d") -> float:

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [tool.poetry]
 name = "YahooRequests"
 packages = [{ include = "YahooRequests" }]
-version = "1.1"
+version = "1.1.1"
 description = "A simple Python library for getting stock prices and company names from Yahoo Finance."
 authors = ["Theodor Gajhede <theodorgajhede@gmail.com>"]
 include = ['CHANGELOG.md', 'LICENSE']

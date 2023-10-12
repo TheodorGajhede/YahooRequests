@@ -1,5 +1,11 @@
 # Changelog for YahooRequests By Theodor Gajhede
 
+* Version 1.1.1 (October 05, 2023)
+    - Introduced a docs.md file with more in-depth explanations with parameters and formatting
+    - Updated all docstrings to follow new formatting with parameters, raises and returns 
+    - Updated workflow file with caching and better dependencies
+    - 
+
 * Version 1.1 (September 12, 2023)
     - Introduced a feature to display a comprehensive table of essential information.
     - Implemented the capability to convert stock data to alternative currencies via the .price method.
