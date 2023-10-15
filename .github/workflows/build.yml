@@ -26,7 +26,7 @@ jobs:
         run: python -V
             
       - name: Install dependencies
-        run: pip install requests tabulate datetime
+        run: pip install requests tabulate datetime newsapi-python
       # Step 4: Define environment variables
       - name: Set environment variables
         run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV; echo "NEWS_KEY=${{ secrets.NEWS_KEY }}" >> $GITHUB_ENV

@@ -7,8 +7,10 @@ from http import HTTPStatus
 import string
 import os
 import datetime
+from datetime import date
 import requests
 from tabulate import tabulate
+from newsapi import NewsApiClient
 
 
 API_URL_TEMPLATE = "https://query1.finance.yahoo.com/v7/finance/options/{ticker}"
@@ -73,62 +75,6 @@ class YahooRequests:
         for suffix in suffixes:
             name = name.lower().replace(suffix, "")
         return string.capwords(name, sep=None)
-
-    @staticmethod
-    def news(ticker: str, timespan=5, index=-1, warning=True) -> str:
-        """
-        Returns a string of news about a company
-
-        Args:
-            ticker: The ticker symbol of the stock.
-            Timespan: the timespan the script will search for the data in
-                An interger representing number of days to search in
-            Index: The number article, -1 will be the first and 0 will be the second and etc.
-            Warning: By default it will write an error because this is still in beta
-
-        Returns:
-            A news segment about a company
-
-        Raises:
-            ConversionError:
-                If the ticker is not Converted correctly and an exception is raised from the requests script
-        """
-        warning = """
-        Warning this feature is not yet fully functional
-        and may not generate a correct article.
-        To disable this warning add the argument warning=False.
-        """
-        currentdate = datetime.datetime.now()
-        timedata = currentdate - datetime.timedelta(days=timespan)
-        index += 1
-        url_news = (
-            f"https://newsapi.org/v2/everything?"
-            f"q={ticker}&"
-            f'from={timedata.strftime("%Y-%m-%d")}&'
-            f"sortBy=popularity&"
-            f'apiKey={os.environ["NEWS_KEY"]}'
-        )
-        response = requests.get(url_news, timeout=10).json()
-        # Return the formatted string of the news article
-        try:
-            if warning:
-                newsformatted = f'{warning}\n\n{response["articles"][index]["title"]} \
-                        \n {response["articles"][index]["description"]} \
-                        \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
-                        {response["articles"][index]["source"]["name"].lstrip()}\
-                        \n Read the full article at: {response["articles"][index]["url"]}'
-            else:
-                newsformatted = f'\n{response["articles"][index]["title"]} \
-                        \n {response["articles"][index]["description"]} \
-                        \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
-                        {response["articles"][index]["source"]["name"].lstrip()}\
-                        \n Read the full article at: {response["articles"][index]["url"]}'
-        except KeyError:
-            newsformatted = (
-                "This feature has expired, broken or bugged, please do not use"
-            )
-
-        return newsformatted
 
     @staticmethod
     def converted_currency(price: int, currency) -> float:
@@ -199,6 +145,63 @@ class YahooRequests:
             # This may occur because the ticker is incorrect or non-existand
             raise ConversionError(response.status_code) from exc
         return data
+
+    @classmethod
+    def news(cls, ticker: str, index=-1, warning=True) -> str:
+        """
+        Returns a string of news about a company
+
+        Args:
+            ticker: The ticker symbol of the stock.
+            Timespan: the timespan the script will search for the data in
+                An interger representing number of days to search in
+            Index: The number article, -1 will be the first and 0 will be the second and etc.
+            Warning: By default it will write an error because this is still in beta
+
+        Returns:
+            A news segment about a company
+
+        Raises:
+            ConversionError:
+                If the ticker is not Converted correctly and an exception is raised from the requests script
+        """
+        warning_text = """
+        Warning this feature is not yet fully functional
+        and may not generate a correct article.
+        To disable this warning add the argument warning=False.
+        """
+        # Initialize
+        newsapi = NewsApiClient(api_key=os.environ["NEWS_KEY"])
+        index += 1
+        # Return the formatted string of the news article
+        response = newsapi.get_top_headlines(
+                q=(cls.name(ticker)),
+                category='business',
+                language='en',
+                country='us'
+                )
+        if response == {'status': 'ok', 'totalResults': 0, 'articles': []}:
+            today = date.today()
+            response = newsapi.get_everything(q=ticker,
+                                              from_param=today - datetime.timedelta(days=5),
+                                              to=today,
+                                              language='en',
+                                              sort_by='relevancy',
+                                              )
+
+        try:
+            newsformatted = f'\n{response["articles"][index]["title"]} \
+                    \n {response["articles"][index]["description"]} \
+                    \n Published at {(response["articles"][index]["publishedAt"])[:-10]} by:\
+                    {response["articles"][index]["source"]["name"].lstrip()}\
+                    \n Read the full article at: {response["articles"][index]["url"]}'
+        except (KeyError, IndexError):
+            newsformatted = (
+                "This feature has expired, broken or bugged, please do not use", response
+            )
+        if warning:
+            return warning_text + str(newsformatted)
+        return str(newsformatted)
 
     @classmethod
     def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval: str) -> list:

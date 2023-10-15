@@ -4,7 +4,8 @@
     - Introduced a docs.md file with more in-depth explanations with parameters and formatting
     - Updated all docstrings to follow new formatting with parameters, raises and returns 
     - Updated workflow file with caching and better dependencies
-    - 
+    - Updated News method to use the NewsApi python api instead of using requests
+    - Updated News to use new search method for new articles
 
 * Version 1.1 (September 12, 2023)
     - Introduced a feature to display a comprehensive table of essential information.

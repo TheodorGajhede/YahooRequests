@@ -19,7 +19,7 @@ jobs:
         run: python -V
         
       - name: Install all dependencies
-        run: pip install requests tabulate pytest
+        run: pip install requests tabulate pytest newsapi-python
       # Step 4: Define environment variables
       - name: Set environment variables
         run: echo "OER_KEY=${{ secrets.OER_KEY }}" >> $GITHUB_ENV; echo "NEWS_KEY=${{ secrets.NEWS_KEY }}" >> $GITHUB_ENV

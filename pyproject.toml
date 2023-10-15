@@ -20,6 +20,7 @@ httpstatus = "^0.9.1"
 datetime = "^1.5"
 requests = "^2.26.0"
 tabulate = "^0.8.10"
+newsapi-python = "^2.5"
 
 [tool.poetry.scripts]
 yahoorequests = "YahooRequests.yahoorequests:main"
