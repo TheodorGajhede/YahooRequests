@@ -180,6 +180,7 @@ class YahooRequests:
                 language='en',
                 country='us'
                 )
+        # If there are no articles to use use the get_everything method instead
         if response == {'status': 'ok', 'totalResults': 0, 'articles': []}:
             today = date.today()
             response = newsapi.get_everything(q=ticker,
