@@ -1,44 +1,41 @@
-# Changelog for YahooRequests By Theodor Gajhede
 
-* Version 1.1.1 (October 05, 2023)
-    - Introduced a docs.md file with more in-depth explanations with parameters and formatting
-    - Updated all docstrings to follow new formatting with parameters, raises and returns 
-    - Updated workflow file with caching and better dependencies
-    - Updated News method to use the NewsApi python api instead of using requests
-    - Updated News to use new search method for new articles
+## YahooRequests Changelog
 
-* Version 1.1 (September 12, 2023)
-    - Introduced a feature to display a comprehensive table of essential information.
-    - Implemented the capability to convert stock data to alternative currencies via the .price method.
-    - Added a "remove suffix" function to eliminate common company suffixes such as Co. or Inc.
-    - Enhanced unit testing for improved code reliability.
-    - Organized code into separate YAML files, enhancing overall codebase readability.
-    - Improved the handling and reporting of exceptions, particularly the ConvertError.
-    - Resolved error-handling issues across multiple methods.
-    - Rectified typographical errors in the README file.
-    - Introduced .gitignore for version control.
-    - Included poetry.lock for dependency management.
-    - Beta: Introduced a News feature to generate articles related to selected companies, though its reliability may vary.
+### Version 1.11 (October 05, 2023)
 
-* Version 1.0 Rewrite (August 01, 2023)
-    - Updated the project structure to adhere to a more modern setup type.
-    - Significantly reduced code duplication, enhancing codebase efficiency.
-    - Streamlined the process of updating the codebase.
-    - Introduced a new YAML configuration file for improved configuration management.
-    - Eliminated erroneous global variables.
-    - Removed duplicate licenses for code clarity.
-    - Special thanks to u/Diapolo10 for valuable technical support.
+- Added ability to find historical data for any company.
+- Added method to calculate average price of a company in a given time range using new history tool.
+- Fixed docstring and documentation errors for history feature.
+- Added docs.md file with more detailed explanations of parameters and formatting.
+- Added apikeys.csv file to allow users to use their own API keys (developer-provided keys will be used - if file is not edited).
+- Updated all docstrings to follow new formatting with parameters, raises, and returns.
+- Updated workflow file with caching and better dependencies.
+- Updated News method to use the NewsApi Python API instead of requests.
+- Updated News to use new search method for new articles.
+- Slight changes to README file.
 
-* Version 0.1.5.X Outdated (July 27, 2023)
+### Version 1.1 (September 12, 2023)
 
-* Version 0.1.4 BROKEN (Date unknown)
+- Added feature to display comprehensive table of essential information.
+- Added ability to convert stock data to alternative currencies using .price method.
+- Added "remove suffix" function to eliminate common company suffixes such as Co. or Inc.
+- Enhanced unit testing for improved code reliability.
+- Organized code into separate YAML files to improve readability of codebase.
+- Improved handling and reporting of exceptions, particularly the ConvertError.
+- Resolved error-handling issues across multiple methods.
+- Rectified typographical errors in README file.
+- Added .gitignore for version control.
+- Added poetry.lock for dependency management.
+- Beta: Added News feature to generate articles related to selected companies, though its reliability may vary.
 
-* Version 0.1.3 Fixes (Date unknown)
+### Version 1.0 Rewrite (August 01, 2023)
 
-* Version 0.1.2 Fixed (July 20, 2023):
-    - Corrected typographical errors in file names.
+- Updated project structure to adhere to a more modern setup type.
+- Significantly reduced code duplication to improve codebase efficiency.
+- Streamlined the process of updating the codebase.
+- Introduced a new YAML configuration file for improved configuration management.
+- Eliminated erroneous global variables.
+- Removed duplicate licenses to improve code clarity.
+- Special thanks to u/Diapolo10 for valuable technical support.
 
-* Version 0.1.1 Test Version (July 19, 2023):
-    - Fixed issues that were causing workflow failures.
-
-* Version 0.1.0 BROKEN (July 18, 2023)
+#### Please note that versions 0.1.5.X, 0.1.4, 0.1.3, 0.1.2, and 0.1.1 are either outdated, broken, or test versions, and are not recommended for use.

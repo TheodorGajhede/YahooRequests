@@ -147,11 +147,11 @@ The `average_price()` function returns the average price of a stock in a time pe
 * ticker: The ticker symbol of the stock.
 * start: The start date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
 * end: The end date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
-* Interval: The interval between the price snippets the interval must be "1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo" all others will raise an error
+* Interval: The interval between the price snippets the interval must be '1d', '5d', '1wk', '1mo', '3mo', '1d', '5d', '1mo', '3mo' all others will raise an error
 
 **Returns**
 
-The average price of the stock for the given date range.
+The average price of the stock for the given time range.
 
 ### Additional notes
 

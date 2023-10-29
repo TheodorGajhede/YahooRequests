@@ -43,6 +43,28 @@ class YahooRequests:
     index = -1
 
     @staticmethod
+    def get_api() -> list:
+        """
+        Returns api names from the api_keys file
+
+        Args:
+            None
+
+        Returns:
+            A list of all api keys
+
+        Raises:
+            N/A
+        """
+        with open("apikeys.csv", "r", encoding="utf-8") as file:
+            apis = []
+            for line in file:
+                if line == 0:
+                    pass
+                apis.append(line[1])
+            return apis
+
+    @staticmethod
     def remove_suffix(name: str) -> str:
         """
         Removes the suffix (End) of a company name
@@ -75,43 +97,6 @@ class YahooRequests:
         for suffix in suffixes:
             name = name.lower().replace(suffix, "")
         return string.capwords(name, sep=None)
-
-    @staticmethod
-    def converted_currency(price: int, currency) -> float:
-        """
-        Converts an price in dollars to another currency
-
-        Args:
-            price: The price of the stock
-            currency: The currency to convert the price to
-
-        Returns:
-            The converted price as an interger
-
-        Raises:
-            ConversionError:
-                If the ticker is not Converted correctly and an exception is raised from the requests script
-            LookupError: Occurs if the dict does not have the desired data.
-        """
-        # Acces the workflow defined OER Key using os
-        api_key = os.environ["OER_KEY"]
-        # Use the OpenExhangeRates api to get current currency rates
-        url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
-        # Use requests to define as variable
-        response = requests.get(url, headers=HEADERS, timeout=10)
-        # Check if response was "ok"
-        if response.status_code != HTTPStatus.OK:
-            raise ConversionError(
-                f"[{response.status_code}] - Failed to fetch ticker symbol"
-            )
-        # Convert to json format so it is indexable
-        data = response.json()
-        # Index to the location of the uppercase version of the chosen curreny
-        try:
-            converted_price = data["rates"][currency.upper()] * price
-        except LookupError:
-            return data
-        return round(converted_price, 2)
 
     @staticmethod
     def request_ticker_info(ticker: str) -> dict:
@@ -147,6 +132,45 @@ class YahooRequests:
         return data
 
     @classmethod
+    def converted_currency(cls, price: int, currency) -> float:
+        """
+        Converts an price in dollars to another currency
+
+        Args:
+            price: The price of the stock
+            currency: The currency to convert the price to
+
+        Returns:
+            The converted price as an interger
+
+        Raises:
+            ConversionError:
+                If the ticker is not Converted correctly and an exception is raised from the requests script
+            LookupError: Occurs if the dict does not have the desired data.
+        """
+        api_key = cls.get_api()[1]
+        if not api_key[1].isnumeric():
+            # Acces the workflow defined OER Key using os
+            api_key = os.environ["OER_KEY"]
+        # Use the OpenExhangeRates api to get current currency rates
+        url = f"https://openexchangerates.org/api/latest.json?app_id={api_key}"
+        # Use requests to define as variable
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        # Check if response was "ok"
+        if response.status_code != HTTPStatus.OK:
+            raise ConversionError(
+                f"[{response.status_code}] - Failed to fetch ticker symbol"
+            )
+        # Convert to json format so it is indexable
+        data = response.json()
+        # Index to the location of the uppercase version of the chosen curreny
+        try:
+            converted_price = data["rates"][currency.upper()] * price
+        except LookupError:
+            return data
+        return round(converted_price, 2)
+
+    @classmethod
     def news(cls, ticker: str, index=-1, warning=True) -> str:
         """
         Returns a string of news about a company
@@ -171,7 +195,11 @@ class YahooRequests:
         To disable this warning add the argument warning=False.
         """
         # Initialize
-        newsapi = NewsApiClient(api_key=os.environ["NEWS_KEY"])
+        api_key = cls.get_api()[0]
+        if not api_key[0].isnumeric():
+            # Acces the workflow defined OER Key using os
+            api_key = os.environ["NEWS_KEY"]
+        newsapi = NewsApiClient(api_key=api_key)
         index += 1
         # Return the formatted string of the news article
         response = newsapi.get_top_headlines(
@@ -205,7 +233,7 @@ class YahooRequests:
         return str(newsformatted)
 
     @classmethod
-    def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval: str) -> list:
+    def get_history(cls, ticker: str, start: datetime.date | str, end: datetime.date | str, interval="1d") -> list:
 
         """
         Retrive daily prices of a stock from end- and startdate
@@ -214,7 +242,9 @@ class YahooRequests:
             ticker: The ticker symbol of the stock.
             start: The start date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
             end: The end date of the date range. Can be a datetime.date object or a string in the format "YYYY-MM-DD".
-
+            interval: The interval between the price points
+                '1d', '5d', '1wk', '1mo', '3mo', '1d', '5d', '1mo', '3mo'
+                no other intervals will be accepted
         Returns:
             A list of prices from every day of the open market in the time period
 
@@ -234,6 +264,12 @@ class YahooRequests:
             # If all values are of the correct type conntinue
             unix_start = int(datetime.datetime.strptime(start, "%Y-%m-%d").timestamp())
             unix_end = int(datetime.datetime.strptime(end, "%Y-%m-%d").timestamp())
+            valid_intervals = '1d', '5d', '1wk', '1mo', '3mo', '1d', '5d', '1mo', '3mo'
+            # Check if the interval is valid
+            if interval not in valid_intervals:
+                raise ConversionError(
+                    f"[{interval} is not a valid intervals all valid intervals are: {valid_intervals}]"
+                )
             # If start is after end, raise a error
             if unix_end < unix_start:
                 raise TypeError(
@@ -252,12 +288,12 @@ class YahooRequests:
             data = response.json()
             # Extract the list of price values
             try:
-                prices = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+                data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
             except IndexError as exc:
                 # If price could not be found raise conversionerror
                 # This may occur because the ticker is incorrect or non-existand
                 raise ConversionError(response.status_code) from exc
-            return prices
+            return data
         except (ValueError, TypeError, ConnectionError) as error:
             raise ConversionError(
                 f"Error check the data and the formatting, Error Caught: {error}"
@@ -283,8 +319,10 @@ class YahooRequests:
                 ConnectionError: If the connection to Yahoo Finance fails.
                 JSONDecodeError: If the JSON data returned by Yahoo Finance is invalid.
         """
-        lst = cls.get_history(ticker, start, end, interval)
-        # Retur the average value of all
+        data = cls.get_history(ticker, start, end, interval)
+        # Index to the correct data in the requested data
+        lst = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]  # type: ignore
+        # Return the average value of all
         return round(sum(lst) / len(lst), 2)
 
     @classmethod
