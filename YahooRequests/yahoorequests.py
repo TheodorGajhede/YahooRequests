@@ -8,6 +8,7 @@ import string
 import os
 import datetime
 from datetime import date
+import csv
 import requests
 from tabulate import tabulate
 from newsapi import NewsApiClient
@@ -57,10 +58,12 @@ class YahooRequests:
             N/A
         """
         with open("apikeys.csv", "r", encoding="utf-8") as file:
+            reader = csv.reader(file)
             apis = []
-            for line in file:
-                if line == 0:
-                    pass
+            line = 1
+            for line in reader:
+                if reader.line_num == 1:
+                    continue  # skip header row
                 apis.append(line[1])
             return apis
 
