@@ -7,6 +7,12 @@ from YahooRequests import YahooRequests
 from YahooRequests.yahoorequests import ConversionError
 
 
+def test_api():
+    '''Test the get_api() method for getting api codes'''
+    assert YahooRequests.get_api()[0] == "ADDKEYHERE" or isinstance(YahooRequests.get_api()[0], int)
+    assert YahooRequests.get_api()[1] == "ADDKEYHERE" or isinstance(YahooRequests.get_api()[1], int)
+
+
 def test_price():
     '''Test the method for getting price'''
     assert isinstance(YahooRequests.price("googl"), float)
