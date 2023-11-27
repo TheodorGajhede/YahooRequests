@@ -1,7 +1,7 @@
 
 ## YahooRequests Changelog
 
-### Version 1.11 (October 05, 2023)
+### Version 1.11 (November 27, 2023)
 
 - Added ability to find historical data for any company.
 - Added method to calculate average price of a company in a given time range using new history tool.
