@@ -61,7 +61,7 @@ In summary, analyst ratings are often aggregated into a single score on a scale 
 Theodor Gajhede from the northern part of Denmark.
 
 ## Support
- If you encounter issues with the library, try using the "--user" flag when installing with pip or send a support ticket to RedDied (reddied@gmail.com).
+ If you encounter issues with the library, try using the "--user" flag when installing with pip or send a support ticket to RedDied at reddied@gmail.com.
 
 ### Credits
  Special thanks to u/Diapolo10 for their contribution to version 1.0.
